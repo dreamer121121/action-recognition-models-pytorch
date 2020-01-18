@@ -12,7 +12,7 @@ from torch.nn import init
 class TCL(nn.Module):
     def __init__(self, in_channels,init_weights):
         super(TCL, self).__init__()
-        self.branch1=nn.Sequential(nn.Conv3d(in_channels,32,kernel_size=(3,1,1),stride=(1,1,1),padding=(1,0,0)),
+        self.branch1=nn.Sequential(nn.Conv3d(in_channels,32,kernel_size=(3,1,1),stride=(1,1,1),padding=(1,0,0)), #只进行时域卷积
                                    nn.ReLU(True),
                                    nn.MaxPool3d(kernel_size=(2, 1, 1), stride=(2, 1, 1))
                                    )
@@ -38,12 +38,12 @@ class TCL(nn.Module):
 
 
 
-# input_size: 16x204x204
+# input_size: 3x16x204x204
 class FstCN(nn.Module):
     def __init__(self, num_class, init_weights=True):
         super(FstCN, self).__init__()
 
-        self.SCL1 = nn.Sequential(nn.Conv3d(3, 96, kernel_size=(1,7,7), stride=(1,2,2),padding=(0,3,3)),
+        self.SCL1 = nn.Sequential(nn.Conv3d(3, 96, kernel_size=(1,7,7), stride=(1,2,2),padding=(0,3,3)),#SCL模块为2D卷积但此处用3D卷积实现，只是将3D卷积核的t维度设为1，之所以用3D是因为需要保证输入的所有帧（16）的空间卷积使用同一个2D卷积核
                                   nn.ReLU(True),
                                   nn.MaxPool3d((1,3,3),stride=(1,2,2)))
         self.SCL2=nn.Sequential(nn.Conv3d(96, 256, kernel_size=(1,5,5), stride=(1,2,2),padding=(0,2,2)),

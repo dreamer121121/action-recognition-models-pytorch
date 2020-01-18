@@ -7,7 +7,6 @@ class conv_pooling(nn.Module):
     # The CNN structure is first trained from single frame, then the FC layers are fine-tuned from scratch.
     def __init__(self, num_class):
         super(conv_pooling, self).__init__()
-
         self.conv=nn.Sequential(* list(torchvision.models.resnet101().children())[:-2])
         self.time_pooling=nn.MaxPool3d(kernel_size=(120,1,1))
         self.average_pool=nn.AvgPool3d(kernel_size=(1,7,7))
@@ -25,7 +24,7 @@ class conv_pooling(nn.Module):
         return conv_out
 
 class cnn_lstm(nn.Module):
-    # Input size: 30x224x224
+    # Input size: 30x224x224 输入为30帧
     # The CNN structure is first trained from single frame, then the lstm is fine-tuned from scratch.
     def __init__(self, num_class):
         super(cnn_lstm, self).__init__()
